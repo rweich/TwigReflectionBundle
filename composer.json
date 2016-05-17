@@ -9,7 +9,9 @@
         }
     ],
     "require": {
-
+        "php":       ">=5.4.0",
+        "twig/twig": "~1.12",
+        "raphhh/trex-reflection": "~0.2"
     },
     "autoload": {
         "psr-0": {

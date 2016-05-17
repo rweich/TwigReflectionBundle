@@ -22,7 +22,10 @@ class FilterList extends FunctionListAbstract
 
         foreach ($this->twig->getExtensions() as $extension) {
             foreach ($extension->getFilters() as $name => $function) {
-                $info = new FilterInfo($name, $function, $extension);
+                if ($function instanceof \Twig_SimpleFilter) {
+                    $name = $function->getName();
+                }
+                $info = new TwigInfo($name, $function, $extension);
                 $functions[$name] = $info;
             }
         }
@@ -31,7 +34,7 @@ class FilterList extends FunctionListAbstract
             if (isset($functions[$name])) {
                 continue;
             }
-            $info = new FilterInfo($name, $function);
+            $info = new TwigInfo($name, $function);
             $functions[$name] = $info;
         }
 

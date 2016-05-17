@@ -22,7 +22,10 @@ class TestList extends FunctionListAbstract
 
         foreach ($this->twig->getExtensions() as $extension) {
             foreach ($extension->getTests() as $name => $function) {
-                $info = new TestInfo($name, $function, $extension);
+                if ($function instanceof \Twig_SimpleTest) {
+                    $name = $function->getName();
+                }
+                $info = new TwigInfo($name, $function, $extension);
                 $functions[$name] = $info;
             }
         }
@@ -31,7 +34,7 @@ class TestList extends FunctionListAbstract
             if (isset($functions[$name])) {
                 continue;
             }
-            $info = new TestInfo($name, $function);
+            $info = new TwigInfo($name, $function);
             $functions[$name] = $info;
         }
 

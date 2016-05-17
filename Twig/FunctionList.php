@@ -16,14 +16,20 @@ namespace Alb\TwigReflectionBundle\Twig;
  */
 class FunctionList extends FunctionListAbstract
 {
+    /**
+     * {@inheritdoc}
+     */
     protected function getFunctions()
     {
         $functions = [];
 
         foreach ($this->twig->getExtensions() as $extension) {
+            /** @var \Twig_ExtensionInterface $extension */
             foreach ($extension->getFunctions() as $name => $function) {
-                $info = new FunctionInfo($name, $function, $extension);
-                $functions[$name] = $info;
+                if ($function instanceof \Twig_SimpleFunction) {
+                    $name = $function->getName();
+                }
+                $functions[$name] = new TwigInfo($name, $function, $extension);
             }
         }
 
@@ -31,8 +37,7 @@ class FunctionList extends FunctionListAbstract
             if (isset($functions[$name])) {
                 continue;
             }
-            $info = new FunctionInfo($name, $function);
-            $functions[$name] = $info;
+            $functions[$name] = new TwigInfo($name, $function);
         }
 
         return $functions;
